@@ -1,26 +1,107 @@
 @import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@import "highlight.js/styles/github-dark.min.css";
+@plugin "@tailwindcss/typography";
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-gh-bg: #0d1117;
+  --color-gh-card: #161b22;
+  --color-gh-border: #30363d;
+  --color-gh-text: #e6edf3;
+  --color-gh-muted: #8b949e;
+  --color-gh-link: #58a6ff;
+  --color-gh-green: #238636;
+  --color-gh-orange: #d29922;
+  --color-gh-red: #da3633;
+  --color-gh-purple: #8957e5;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background-color: var(--color-gh-bg);
+  color: var(--color-gh-text);
+  font-family: var(--font-sans);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.prose {
+  --tw-prose-body: var(--color-gh-text);
+  --tw-prose-headings: var(--color-gh-text);
+  --tw-prose-links: var(--color-gh-link);
+  --tw-prose-bold: var(--color-gh-text);
+  --tw-prose-code: var(--color-gh-text);
+  --tw-prose-quotes: var(--color-gh-muted);
+  --tw-prose-quote-borders: var(--color-gh-border);
+  --tw-prose-counters: var(--color-gh-muted);
+  --tw-prose-bullets: var(--color-gh-muted);
+  --tw-prose-hr: var(--color-gh-border);
+  --tw-prose-th-borders: var(--color-gh-border);
+  --tw-prose-td-borders: var(--color-gh-border);
+}
+
+.prose pre {
+  background-color: var(--color-gh-card) !important;
+  border: 1px solid var(--color-gh-border);
+  border-radius: 6px;
+}
+
+.prose code:not(pre code) {
+  background-color: rgba(110, 118, 129, 0.4);
+  padding: 0.2em 0.4em;
+  border-radius: 6px;
+  font-size: 85%;
+}
+
+.prose code:not(pre code)::before,
+.prose code:not(pre code)::after {
+  content: none;
+}
+
+.prose a {
+  text-decoration: none;
+}
+
+.prose a:hover {
+  text-decoration: underline;
+}
+
+.prose table {
+  border-collapse: collapse;
+}
+
+.prose th,
+.prose td {
+  border: 1px solid var(--color-gh-border);
+  padding: 6px 13px;
+}
+
+.prose tr:nth-child(2n) {
+  background-color: var(--color-gh-card);
+}
+
+.prose img {
+  border-radius: 6px;
+}
+
+.prose blockquote {
+  border-left-color: var(--color-gh-border);
+  color: var(--color-gh-muted);
+}
+
+.input {
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid var(--color-gh-border);
+  background-color: var(--color-gh-bg);
+  padding: 6px 12px;
+  font-size: 14px;
+  color: var(--color-gh-text);
+}
+
+.input:focus {
+  border-color: var(--color-gh-link);
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--color-gh-muted);
 }
