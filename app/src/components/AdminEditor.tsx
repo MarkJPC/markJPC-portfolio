@@ -11,6 +11,7 @@ function projectToForm(project: Project | null): ProjectFormData {
       title: "",
       company: "",
       role: "",
+      location: "",
       type: "personal",
       status: "ongoing",
       start_date: "",
@@ -28,6 +29,7 @@ function projectToForm(project: Project | null): ProjectFormData {
     title: project.title,
     company: project.company || "",
     role: project.role || "",
+    location: project.location || "",
     type: project.type,
     status: project.status,
     start_date: project.start_date || "",
@@ -51,6 +53,7 @@ export default function AdminEditor({
   const isNew = !project;
   const [form, setForm] = useState<ProjectFormData>(projectToForm(project));
   const [tab, setTab] = useState<"write" | "preview">("write");
+  const [descTab, setDescTab] = useState<"write" | "preview">("write");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -66,6 +69,7 @@ export default function AdminEditor({
       title: form.title,
       company: form.company || null,
       role: form.role || null,
+      location: form.location || null,
       type: form.type,
       status: form.status,
       start_date: form.start_date || null,
@@ -118,7 +122,7 @@ export default function AdminEditor({
           />
         </Field>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-3 gap-4">
           <Field label="Company">
             <input
               type="text"
@@ -133,6 +137,15 @@ export default function AdminEditor({
               value={form.role}
               onChange={(e) => update("role", e.target.value)}
               className="input"
+            />
+          </Field>
+          <Field label="Location">
+            <input
+              type="text"
+              value={form.location}
+              onChange={(e) => update("location", e.target.value)}
+              className="input"
+              placeholder="e.g. Calgary, AB"
             />
           </Field>
         </div>
@@ -179,14 +192,50 @@ export default function AdminEditor({
           </Field>
         </div>
 
-        <Field label="Description">
-          <input
-            type="text"
-            value={form.description}
-            onChange={(e) => update("description", e.target.value)}
-            className="input"
-            required
-          />
+        <Field label="Description (Markdown supported)">
+          <div className="rounded-md border border-gh-border">
+            <div className="flex border-b border-gh-border">
+              <button
+                type="button"
+                onClick={() => setDescTab("write")}
+                className={`px-3 py-1.5 text-xs font-medium ${
+                  descTab === "write"
+                    ? "border-b-2 border-gh-orange text-gh-text"
+                    : "text-gh-muted hover:text-gh-text"
+                }`}
+              >
+                Write
+              </button>
+              <button
+                type="button"
+                onClick={() => setDescTab("preview")}
+                className={`px-3 py-1.5 text-xs font-medium ${
+                  descTab === "preview"
+                    ? "border-b-2 border-gh-orange text-gh-text"
+                    : "text-gh-muted hover:text-gh-text"
+                }`}
+              >
+                Preview
+              </button>
+            </div>
+            {descTab === "write" ? (
+              <textarea
+                value={form.description}
+                onChange={(e) => update("description", e.target.value)}
+                className="min-h-[120px] w-full resize-none bg-gh-bg p-3 font-mono text-sm text-gh-text placeholder:text-gh-muted focus:outline-none"
+                placeholder="Write a short project description in Markdown..."
+                required
+              />
+            ) : (
+              <div className="min-h-[120px] p-3">
+                {form.description ? (
+                  <MarkdownRenderer content={form.description} size="sm" />
+                ) : (
+                  <p className="text-sm text-gh-muted">Nothing to preview</p>
+                )}
+              </div>
+            )}
+          </div>
         </Field>
 
         <Field label="Tech Stack (comma-separated)">

@@ -87,13 +87,19 @@ body {
   color: var(--color-gh-muted);
 }
 
+.prose-muted {
+  --tw-prose-body: var(--color-gh-muted);
+  --tw-prose-headings: var(--color-gh-muted);
+  --tw-prose-bold: var(--color-gh-muted);
+}
+
 .input {
   width: 100%;
   border-radius: 6px;
   border: 1px solid var(--color-gh-border);
   background-color: var(--color-gh-bg);
-  padding: 6px 12px;
-  font-size: 14px;
+  padding: 10px 14px;
+  font-size: 16px;
   color: var(--color-gh-text);
 }
 

@@ -27,9 +27,9 @@ export default function TechBadge({ tech }: { tech: string }) {
   const color = techColors[tech] || "#8b949e";
 
   return (
-    <span className="inline-flex items-center gap-1.5 text-xs text-gh-muted">
+    <span className="inline-flex items-center gap-2 text-sm text-gh-muted">
       <span
-        className="inline-block h-3 w-3 rounded-full"
+        className="inline-block h-3.5 w-3.5 rounded-full"
         style={{ backgroundColor: color }}
       />
       {tech}

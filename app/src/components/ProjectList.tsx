@@ -35,18 +35,18 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
 
   return (
     <div>
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row">
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row">
         <input
           type="text"
           placeholder="Find a repository..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 rounded-md border border-gh-border bg-gh-bg px-3 py-1.5 text-sm text-gh-text placeholder:text-gh-muted focus:border-gh-link focus:outline-none"
+          className="flex-1 rounded-md border border-gh-border bg-gh-bg px-4 py-2.5 text-base text-gh-text placeholder:text-gh-muted focus:border-gh-link focus:outline-none"
         />
         <select
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
-          className="rounded-md border border-gh-border bg-gh-card px-3 py-1.5 text-sm text-gh-text focus:border-gh-link focus:outline-none"
+          className="rounded-md border border-gh-border bg-gh-card px-4 py-2.5 text-base text-gh-text focus:border-gh-link focus:outline-none"
         >
           <option value="">Type</option>
           {types.map((t) => (
@@ -58,7 +58,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="rounded-md border border-gh-border bg-gh-card px-3 py-1.5 text-sm text-gh-text focus:border-gh-link focus:outline-none"
+          className="rounded-md border border-gh-border bg-gh-card px-4 py-2.5 text-base text-gh-text focus:border-gh-link focus:outline-none"
         >
           <option value="">Status</option>
           {statuses.map((s) => (
@@ -68,11 +68,11 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
           ))}
         </select>
       </div>
-      <div className="text-sm text-gh-muted mb-4">
+      <div className="text-base text-gh-muted mb-6">
         <strong className="text-gh-text font-semibold">{filtered.length}</strong>{" "}
         results for repositories
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="grid grid-cols-1 gap-6">
         {filtered.map((project) => (
           <RepoCard key={project.id} project={project} />
         ))}
