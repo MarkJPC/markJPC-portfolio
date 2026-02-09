@@ -3,8 +3,14 @@
 import { motion } from "motion/react";
 import type { Project } from "@/lib/types";
 import ProjectList from "@/components/ProjectList";
+import FeaturedProject from "@/components/FeaturedProject";
 
 export default function ProjectsSection({ projects }: { projects: Project[] }) {
+  const featuredProject = projects.find((p) => p.is_featured) ?? null;
+  const remainingProjects = featuredProject
+    ? projects.filter((p) => p.id !== featuredProject.id)
+    : projects;
+
   return (
     <section id="projects" className="scroll-mt-16 border-t border-gh-border py-24">
       <motion.div
@@ -21,7 +27,12 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
             Experience &amp; Projects
           </h2>
         </div>
-        <ProjectList projects={projects} />
+        {featuredProject && (
+          <div className="mb-10">
+            <FeaturedProject project={featuredProject} />
+          </div>
+        )}
+        <ProjectList projects={remainingProjects} />
       </motion.div>
     </section>
   );

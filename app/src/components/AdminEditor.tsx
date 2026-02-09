@@ -21,6 +21,8 @@ function projectToForm(project: Project | null): ProjectFormData {
       tech_stack: "",
       github_url: "",
       live_url: "",
+      subtitle: "",
+      logo_url: "",
       is_featured: false,
       sort_order: 0,
     };
@@ -39,6 +41,8 @@ function projectToForm(project: Project | null): ProjectFormData {
     tech_stack: project.tech_stack.join(", "),
     github_url: project.github_url || "",
     live_url: project.live_url || "",
+    subtitle: project.subtitle || "",
+    logo_url: project.logo_url || "",
     is_featured: project.is_featured,
     sort_order: project.sort_order,
   };
@@ -55,6 +59,7 @@ export default function AdminEditor({
   const [tab, setTab] = useState<"write" | "preview">("write");
   const [descTab, setDescTab] = useState<"write" | "preview">("write");
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
 
   function update(field: keyof ProjectFormData, value: string | boolean | number) {
@@ -82,6 +87,8 @@ export default function AdminEditor({
         .filter(Boolean),
       github_url: form.github_url || null,
       live_url: form.live_url || null,
+      subtitle: form.subtitle || null,
+      logo_url: form.logo_url || null,
       is_featured: form.is_featured,
       sort_order: form.sort_order,
     };
@@ -104,6 +111,40 @@ export default function AdminEditor({
     }
   }
 
+  async function handleLogoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setError("");
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await fetch("/api/projects/logo", { method: "POST", body: formData });
+    if (!res.ok) {
+      const data = await res.json();
+      setError(data.error || "Logo upload failed");
+    } else {
+      const data = await res.json();
+      update("logo_url", data.logo_url);
+    }
+    setUploading(false);
+    e.target.value = "";
+  }
+
+  async function handleLogoDelete() {
+    setError("");
+    const res = await fetch("/api/projects/logo", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ logo_url: form.logo_url }),
+    });
+    if (!res.ok) {
+      const data = await res.json();
+      setError(data.error || "Logo delete failed");
+    } else {
+      update("logo_url", "");
+    }
+  }
+
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       {/* Left: Metadata Form */}
@@ -119,6 +160,16 @@ export default function AdminEditor({
             onChange={(e) => update("title", e.target.value)}
             className="input"
             required
+          />
+        </Field>
+
+        <Field label="Subtitle">
+          <input
+            type="text"
+            value={form.subtitle}
+            onChange={(e) => update("subtitle", e.target.value)}
+            className="input"
+            placeholder="Short subtitle for featured display"
           />
         </Field>
 
@@ -288,6 +339,35 @@ export default function AdminEditor({
             </label>
           </div>
         </div>
+
+        <Field label="Logo">
+          {form.logo_url ? (
+            <div className="flex items-center gap-3">
+              <img
+                src={form.logo_url}
+                alt="Project logo"
+                className="h-16 w-16 rounded-md border border-gh-border object-contain"
+              />
+              <button
+                type="button"
+                onClick={handleLogoDelete}
+                className="text-sm text-gh-red hover:underline"
+              >
+                Delete
+              </button>
+            </div>
+          ) : (
+            <p className="mb-2 text-sm text-gh-muted">No logo uploaded</p>
+          )}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleLogoUpload}
+            disabled={uploading}
+            className="mt-2 text-sm text-gh-muted file:mr-3 file:rounded-md file:border file:border-gh-border file:bg-gh-bg file:px-3 file:py-1.5 file:text-sm file:text-gh-text"
+          />
+          {uploading && <p className="mt-1 text-sm text-gh-muted">Uploading...</p>}
+        </Field>
 
         {error && <p className="text-sm text-gh-red">{error}</p>}
 

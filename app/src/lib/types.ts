@@ -13,6 +13,8 @@ export interface Project {
   tech_stack: string[];
   github_url: string | null;
   live_url: string | null;
+  subtitle: string | null;
+  logo_url: string | null;
   is_featured: boolean;
   sort_order: number;
   created_at: string;
@@ -89,6 +91,8 @@ export interface ProjectFormData {
   tech_stack: string;
   github_url: string;
   live_url: string;
+  subtitle: string;
+  logo_url: string;
   is_featured: boolean;
   sort_order: number;
 }
